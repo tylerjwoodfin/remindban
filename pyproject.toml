@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "remindban"
+version = "0.1.0"
+description = "Kanban-backed reminders"
+readme = "README.md"
+license = { file = "LICENSE.md" }
+authors = [{ name = "Tyler Woodfin", email = "feedback-remindban@tyler.cloud" }]
+requires-python = ">=3.11"
+keywords = ["reminders", "kanban", "vikunja", "cli"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "prompt_toolkit>=3.0.36",
+  "python-dateutil>=2.8.2",
+  "PyYAML>=6.0",
+  "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+remindban = "remindban.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/tylerjwoodfin/remindban"
+Issues = "https://github.com/tylerjwoodfin/remindban/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
