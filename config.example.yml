@@ -1,0 +1,25 @@
+# RemindBan
+# Open this file again with: remindban edit
+
+kanban:
+  # v1 ships with one provider. Adapters live behind the same interface.
+  provider: vikunja
+  project: Remindban
+
+vikunja:
+  # Leave a value blank to use the matching environment variable or Cabinet key.
+  # Cabinet keys: vikunja.api_root, vikunja.api_token, vikunja.base_url
+  api_root: ""
+  base_url: ""
+  api_token: ""
+
+# Buckets are fixed in v1: Backlog, Today, In Progress, and Done.
+# Today is derived from date labels. The catalog type can grow later;
+# setting configurable to true is rejected until then.
+buckets:
+  configurable: false
+
+sync:
+  # Local time for `remindban install-sync`. The command itself is `remindban sync`.
+  enabled: true
+  time: "03:00"

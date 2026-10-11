@@ -59,6 +59,11 @@ sync:
         load_config(str(path), environ={})
 
 
+def test_example_file_matches_the_starter_template():
+    example = Path(__file__).resolve().parents[1] / "config.example.yml"
+    assert example.read_text(encoding="utf-8") == example_config()
+
+
 def test_unknown_provider(tmp_path: Path, monkeypatch):
     monkeypatch.setattr("remindban.config._cabinet_get", lambda *keys: "")
     path = tmp_path / "config.yml"
