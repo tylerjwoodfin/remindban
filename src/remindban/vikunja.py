@@ -241,10 +241,12 @@ class VikunjaBackend:
         current = {
             str(item.get("title") or "").casefold(): int(item["id"])
             for item in self.client.get_all(f"/tasks/{card.id}/labels")
-            if item.get("id") is not None
+            if item.get("id") is not None and item.get("title")
         }
+        desired_keys = {label.casefold() for label in desired}
         for title, label_id in current.items():
-            if title not in {label.casefold() for label in desired}:
+            # Only the managed YYYY-MM-DD label is replaced. Other labels stay.
+            if _is_date_label(title) and title not in desired_keys:
                 self.client.request("DELETE", f"/tasks/{card.id}/labels/{label_id}")
         for label in desired:
             if label.casefold() not in current:

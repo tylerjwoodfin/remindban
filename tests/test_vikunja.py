@@ -190,6 +190,31 @@ def test_create_retries_without_a_taken_identifier_and_files_the_date_label():
     assert [label["title"] for label in api.labels] == ["2026-10-12", "home"]
 
 
+def test_date_label_updates_leave_other_labels_in_place():
+    store = MemoryApi()
+    client, api = backend(store)
+    client.ensure_layout()
+    task_id = store._id()
+    home_id = store._id()
+    old_date_id = store._id()
+    api.labels.extend(
+        [
+            {"id": home_id, "title": "home"},
+            {"id": old_date_id, "title": "2026-10-01"},
+        ]
+    )
+    api.tasks.append({"id": task_id, "title": "Rent", "project_id": api.projects[0]["id"]})
+    api.task_labels[task_id] = [home_id, old_date_id]
+    client.update_labels(
+        client.to_card({"id": task_id, "title": "Rent", "labels": [{"title": "home"}, {"title": "2026-10-01"}]}),
+        ("home", "2026-10-10"),
+    )
+    titles = {
+        api._by_id(api.labels, label_id)["title"] for label_id in api.task_labels[task_id]
+    }
+    assert titles == {"home", "2026-10-10"}
+
+
 def test_filter_buckets_are_refused():
     store = MemoryApi()
     project = {"id": store._id(), "title": "Remindban"}
