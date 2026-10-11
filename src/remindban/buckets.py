@@ -80,6 +80,12 @@ class BucketCatalog:
     def derived(self) -> BucketSpec:
         return self._one(BucketRole.DERIVED, "derived")
 
+    def find_role(self, role: BucketRole) -> BucketSpec | None:
+        matches = [spec for spec in self.specs if spec.role is role]
+        if len(matches) > 1:
+            raise ValueError(f"A bucket catalog needs at most one {role.value} bucket.")
+        return matches[0] if matches else None
+
     def sticky_titles(self) -> frozenset[str]:
         """Buckets sync must not move cards out of."""
 
