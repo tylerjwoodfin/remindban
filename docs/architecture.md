@@ -48,4 +48,4 @@ Sync treats a bare ISO-date label as RemindBan's own. It rewrites that label whe
 
 ## Errors
 
-Expected failures are `RemindBanError` subclasses (`ConfigError`, `ParseError`, `KanbanError`, `ScheduleError`). The CLI prints `remindban: ...` and exits `1`. HTTP 401 and 403 mention the token setting and do not echo the token. Unexpected exceptions are one line unless `--debug` is set.
+Expected failures are `RemindBanError` subclasses (`ConfigError`, `ParseError`, `KanbanError`, `ScheduleError`). The CLI prints `remindban: ...` and exits `1`. HTTP 401 and 403 name the route and do not echo the token. Vikunja uses that status both for a bad token and for a scoped token that is missing the route. Unexpected exceptions are one line unless `--debug` is set.

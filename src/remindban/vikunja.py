@@ -87,19 +87,28 @@ class RequestsTransport:
 
     def _http_error(self, method: str, path: str, response: requests.Response) -> KanbanError:
         if response.status_code in {401, 403}:
+            detail = self._snippet(response)
+            said = f" Vikunja said: {detail}." if detail else ""
             return KanbanError(
-                f"Vikunja rejected the API token (HTTP {response.status_code}). "
-                "Check vikunja.api_token.",
+                f"Vikunja refused {method} {path} (HTTP {response.status_code}).{said} "
+                "A scoped API token gets this response when it is missing that route, "
+                "not only when the token itself is wrong. RemindBan needs to create and "
+                "update the Remindban project, its kanban view, and its buckets; create "
+                "and update tasks; and create and remove labels.",
                 status=response.status_code,
             )
+        detail = self._snippet(response)
+        suffix = f": {detail}" if detail else ""
+        return KanbanError(
+            f"Vikunja {method} {path} failed (HTTP {response.status_code}){suffix}.",
+            status=response.status_code,
+        )
+
+    def _snippet(self, response: requests.Response) -> str:
         snippet = " ".join((response.text or "").split())
         if self._token:
             snippet = snippet.replace(self._token, "[token]")
-        detail = f": {snippet[:300]}" if snippet else ""
-        return KanbanError(
-            f"Vikunja {method} {path} failed (HTTP {response.status_code}){detail}.",
-            status=response.status_code,
-        )
+        return snippet[:300]
 
 
 class VikunjaClient:

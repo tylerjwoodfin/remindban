@@ -261,9 +261,10 @@ def test_http_errors_do_not_include_the_token():
             return Denied()
 
     transport = RequestsTransport("http://example.test/api/v2", "super-secret", session=DeniedSession())
-    with pytest.raises(KanbanError, match="rejected the API token") as caught:
+    with pytest.raises(KanbanError, match="scoped API token") as caught:
         transport.request("GET", "/projects")
     assert "super-secret" not in str(caught.value)
+    assert "GET /projects" in str(caught.value)
 
 
 def test_connection_errors_name_the_api_root():

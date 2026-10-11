@@ -54,6 +54,8 @@ sync:
 
 Use the loopback API (`http://127.0.0.1:3456/api/v1` in Cabinet). The public host sits behind Authentik and is only used for links.
 
+The token has to be allowed to create and update a project, its kanban view, and its buckets; create and update tasks; and create and remove labels. Vikunja answers a missing scope with HTTP 401 and an "invalid token" message. `remindban init` includes that text plus the route it was calling. The Cabinet token named for the TJW CLI can read projects and create tasks; creating the Remindban project needs the project scope added on that token, or a token that already has it.
+
 `remindban init` creates the **Remindban** project if it is missing, adds the four buckets, and points Vikunja's default bucket at Backlog and its done bucket at Done.
 
 ## Usage
